@@ -18,10 +18,54 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     mysqli_stmt_close($stmt);
 }
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register 🎄</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-body">
 
-<form method="POST">
-    <h2>🎄 Register</h2>
-    Username: <input type="text" name="username" required><br><br>
-    Password: <input type="password" name="password" required><br><br>
-    <button type="submit">Register</button>
-</form>
+  <div class="auth-wrapper">
+    <div class="auth-card">
+
+
+      <h1 class="auth-title">Create an Account</h1>
+      <?php if (isset($_SESSION["username"])): ?>
+        <p class="welcome-msg">
+             Hey, <?= htmlspecialchars($_SESSION["username"]) ?>! 🎄
+        </p>
+        <?php endif; ?>
+      <p class="auth-subtitle">Save your scores & join the leaderboard ✨</p>
+
+      <?php if (!empty($error)): ?>
+        <div class="auth-error"><?= htmlspecialchars($error) ?></div>
+      <?php endif; ?>
+
+      <?php if (!empty($success)): ?>
+        <div class="auth-success">
+          Registration successful 🎉<br>
+          <a href="login.php">Sign in</a>
+        </div>
+      <?php else: ?>
+        <form method="POST" class="auth-form">
+          <label>
+            Username
+            <input type="text" name="username" required>
+          </label>
+
+          <label>
+            Password
+            <input type="password" name="password" required>
+          </label>
+
+          <button type="submit" class="auth-button">Register</button>
+        </form>
+      <?php endif; ?>
+
+    </div>
+  </div>
+
+</body>
+</html>

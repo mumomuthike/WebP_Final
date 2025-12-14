@@ -18,10 +18,10 @@ let maxTime = 60;
 
 /* difficulty */
 const LEVELS = {
-    easy:   { size: 4,  time: 60 },
-    medium: { size: 6,  time: 180 },
-    hard:   { size: 8,  time: 300 },
-    insane: { size: 10, time: 600 },
+    easy:   { size: 3, time: 60 },    // 3×3
+    medium: { size: 4, time: 120 },   // 4×4
+    hard:   { size: 6, time: 240 },   // 6×6
+    insane: { size: 8, time: 420 },   // 8×8
 };
 
 

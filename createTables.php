@@ -1,15 +1,17 @@
 <?php
-require "configure.php";
+require __DIR__ . "/configure.php";
 
-/* TABLE */
+/* USERS TABLE */
 $sql_users = "
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL
-)";
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+";
 
-
+/* SESSIONS TABLE */
 $sql_sessions = "
 CREATE TABLE IF NOT EXISTS puzzle_sessions (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -19,17 +21,20 @@ CREATE TABLE IF NOT EXISTS puzzle_sessions (
     elapsed_seconds INT,
     score INT DEFAULT 0,
     finished TINYINT(1),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)";
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_leaderboard (finished, difficulty, score, moves, elapsed_seconds)
+) ENGINE=InnoDB;
+";
 
+/* RUN QUERIES + ERROR CHECKING */
+if (!mysqli_query($link, $sql_users)) {
+    die("❌ Error creating users table: " . mysqli_error($link));
+}
 
-$sql_index = "CREATE INDEX IF NOT EXISTS idx_sessions_leaderboard ON puzzle_sessions (finished, difficulty, score, moves, elapsed_seconds, created_at)";
+if (!mysqli_query($link, $sql_sessions)) {
+    die("❌ Error creating puzzle_sessions table: " . mysqli_error($link));
+}
 
-mysqli_query($link, $sql_users);
-mysqli_query($link, $sql_sessions);
-@mysqli_query($link, $sql_index); 
-
-echo "Tables created successfully.";
+echo "✅ Tables created successfully.";
 
 mysqli_close($link);
-?>
